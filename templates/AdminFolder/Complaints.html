@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    :root {
+        --primary: #0d6efd;
+        --success: #198754;
+        --muted: #6c757d;
+        --bg-light: #f7f9fc;
+        --card-bg: #ffffff;
+        --text-color: #333;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --hover-shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        color: var(--text-color);
+    }
+
+    h2 {
+        font-weight: 700;
+        margin-bottom: 2rem;
+    }
+
+    .container {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .complaint-card {
+        border-radius: 20px;
+        box-shadow: 0 10px 20px var(--shadow);
+        background-color: var(--card-bg);
+        padding: 2rem 1.5rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-align: center;
+        height: 100%;
+    }
+
+    .complaint-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 28px var(--hover-shadow);
+    }
+
+    .complaint-icon {
+        font-size: 48px;
+        margin-bottom: 1rem;
+    }
+
+    .open { color: var(--primary); }
+    .Acknowledged { color: var(--success); }
+    .completed { color: var(--muted); }
+
+    .card-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+        font-size: 0.95rem;
+        color: #666;
+    }
+
+    @media (max-width: 992px) {
+        .card-title {
+            font-size: 1.15rem;
+        }
+
+        .complaint-icon {
+            font-size: 42px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .complaint-card {
+            padding: 1.5rem 1.25rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+        }
+
+        .complaint-icon {
+            font-size: 36px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        .row > div {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        .complaint-card {
+            padding: 1.25rem 1rem;
+        }
+    }
+</style>
+
+<main id="main" class="main">
+    <div class="container text-center">
+        <h2>📌 Select Complaint</h2>
+
+        <div class="row g-4 justify-content-center">
+            {% set cards = [
+                {'type': 'open', 'icon': 'fa-folder-open', 'title': 'Open Complaints', 'desc': 'View all pending complaints', 'class': 'open'},
+                {'type': 'Acknowledged', 'icon': 'fa-check-circle', 'title': 'Acknowledged Complaints', 'desc': 'Complaints Acknowledged for processing', 'class': 'Acknowledged'},
+                {'type': 'completed', 'icon': 'fa-check-double', 'title': 'Completed Complaints', 'desc': 'Complaints that have been resolved', 'class': 'completed'}
+            ] %}
+
+            {% for card in cards %}
+            <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+                <div class="complaint-card" onclick="openComplaintPage('{{ card.type }}')">
+                    <i class="fas {{ card.icon }} complaint-icon {{ card.class }}"></i>
+                    <h5 class="card-title">{{ card.title }}</h5>
+                    <p class="card-desc">{{ card.desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+<script>
+    function openComplaintPage(status) {
+        const routes = {
+            open: "/OpenComplaints",
+            Acknowledged: "/ApprovedComplaints",
+            completed: "/completedcomplaintsdata"
+        };
+        if (routes[status]) {
+            window.location.href = routes[status];
+        }
+    }
+</script>
+
+{% endblock content %}

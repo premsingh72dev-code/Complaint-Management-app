@@ -1,0 +1,323 @@
+appemail: imon rdmm ilsw ltxw
+
+# User:
+Create Complaint --> 1. All Users Type.
+
+       <------  Open Complaints --->
+1. Open Complaints: Complaint Details-, Date, Complaint type , Image_url, Complaint numer and iD
+2. Edit Complaint Open --> Edit Complaint
+3. Delete Complaint --> 
+
+<------  in Progress Complaints --->
+1. Complaint Details and technican details, complaint status , user can close -- feedback bhi dega
+
+# aaj ka kaam
+1. login ka kaam Done
+
+# <---------------------- Completed Complaints ------------------------------->
+
+
+
+2. Admin Section:
+
+# <--------------------     New Complaints        -------------------->
+* Admin View New Complaints:
+* options --> Accept or transfer with reason 
+* 
+
+<-------------       Accept User Complaints     ------------->
+admin token, usercompalint number
+
+1. Date & Time 
+2. Admin Details
+3. Email send to user
+4. message complaint accepted
+
+<-------------------- Number of Complaints --------------------->
+1. User - uski iD
+2. Admin -- uski ID bhi match hogi accept ke case, open type
+
+<---------------------------       Modify Complaints       ------------------------->
+1. Admin --> token , complaint-ID, Complaint Type
+
+
+<---------------------------       Cloud  Database  MongoDB     ------------------------->
+
+Admin token: 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTc0MjM2MDQ4MDgzNiIsImlhdCI6MTc0NDQzMzgwNn0.AKJCFu6YcIzLDxWL3CG6BW6T4qttPSHsstN44ZjIAlM
+
+
+super-admin token: 
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTczOTUzMTAzNDE1NyIsImlhdCI6MTc0MTQwODM1NX0.W1gjMmKoSe_w89_RR-9HTIzokUy2e9jWGJGWHX0q2HQ
+
+
+User Token : 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTc0MTcxNzE5NjAwOSIsImlhdCI6MTc0NDQzMzQ0Mn0.UvnQ_qXhOBAVRjDULSQzJskElZ4c8wA8sbygj8jznmw
+
+# <-------------------------       Pending Tasks for Admin or Super-admin     ----------------------->
+
+1. Update User Same  as Admin or Super-admin
+2. Delete User 
+3. Disable User 
+
+
+# <--------------------------------       FireBase Setup              ------------------------------>
+
+# <--------------------------------       suppport mail            ------------------------------>
+
+ghot dfne fnmf vbqu
+
+ghot dfne fnmf vbqu
+
+
+# <--------------------------------             MongoDB config               -------------------------------->
+
+Dcoumentation link: https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/
+or ---> https://hub.tcno.co/linux/mongodb/install/
+
+conncetion_string: mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.8
+
+command: sudo nano /etc/mongod.conf ---> to bindIP
+
+conncetion_string: mongodb://62.72.12.224:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.8
+
+db.createUser({
+    user: "admin",
+    pwd: "Admin@testingappDemolive",
+    roles: [{ role: "root", db: "admin" }]
+})
+
+mongo mongodb://62.72.12.224:27017
+
+adminstringconn  ---> mongodb://admin:Admin@testingappDemolive@62.72.12.224:27017/admin
+
+<==========================     Extra       ====================>
+
+Notification = {}
+current_time = time.time()
+Notification['_id'] = str(int(current_time * 1000))
+
+Notification['title'] = title
+Notification['body'] = body
+Notification['dates'] = {
+    "date": str(datetime.datetime.now().strftime("%d-%m-%Y")),
+    "time": str(datetime.datetime.now().strftime("%H:%M:%S")),
+    "dateTime": str(datetime.datetime.now())
+}
+Notification['Type'] = "Complaint Closed"
+Notification['Status'] = notification_res
+Notification['ComplaintID'] = data['Complaint ID']
+Notification['UserID'] = str(userID)
+collection4.insert_one(Notification)
+
+
+#   <---------------------- Adding new items -------------------->
+
+token = user.get('token')
+if not token:
+    return jsonify({'res': 'error', 'msg': 'Token is missing', 'code': 401})
+
+decoded_token = decode_jwt(token)
+print("Decoded Token Data:", decoded_token)
+
+if decoded_token.get("response") == "success":
+    user_id = str(decoded_token['data']['user_id'])
+    print("User ID:", user_id)
+else:
+    app.logger.warning(f"Invalid token: {token}")
+    return jsonify({'res': 'error', 'msg': 'Invalid token', 'code': 402})
+
+
+<==================================         New Changes            ===============================>
+
+1. UserInfo Details are:
+
+1. Name
+3. Email ID
+4. Phone Number
+5. Gender
+6. Branch
+7. Designation
+8. Quarter
+9. Landmark / Location
+
+
+2. Reports -> Admin and User
+3. Create Account options
+4. Testing
+
+// Root password: Photonstar@987412365
+
+
+// Domain Manage: https://support.hostinger.com/en/articles/1583227-how-to-point-a-domain-to-your-vps
+
+
+// NEW Mongo: mongodb://82.25.104.44:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.4.0
+
+<-----------------------    MongoDB      ------------------->
+27021
+mongo --port 27021
+
+use admin
+
+db.createUser(
+         {
+         user: "Admin",
+         pwd: "Complaintapprailway2025", 
+         roles: [ { role: "root", db: "admin" },
+         ]
+         }
+         )
+
+db.updateUser("Admin", { pwd: "Complaintapprailway2025" })
+
+
+/home/myapp/app/app.py
+
+mongosh --port 27021 --authenticationDatabase "admin"     -u "Admin" -p
+
+mongo --> mongodb://Admin:Complaintapprailway2025@82.25.104.44:27021/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false
+
+# Complaint wise feedback :
+1. Complaint Number 
+2. 
+
+<----------------------------         NEW Changes         --------------------------->
+1. Close Complaint Api for yes or no
+2. 
+
+<----------------------------         OLD OTP EMail code        --------------------------->
+
+
+def OtpEmailMessage(user, OTP, subject):
+    msg = EmailMessage()
+    msg['Subject'] = subject
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = user
+
+    # HTML content with the OTP correctly inserted
+    html_content = f'''
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Email</title>
+    <style>
+        /* General styles */
+        body {{
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }}
+
+        .email-container {{
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }}
+
+        .email-header {{
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }}
+
+        .email-header h1 {{
+            margin: 0;
+            font-size: 24px;
+        }}
+
+        .email-body {{
+            padding: 20px;
+            color: #333333;
+        }}
+
+        .email-body p {{
+            margin: 10px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }}
+
+        .otp-code {{
+            display: block;
+            text-align: center;
+            font-size: 32px;
+            color: #007bff;
+            font-weight: bold;
+            margin: 20px 0;
+            letter-spacing: 4px;
+        }}
+
+        .email-footer {{
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: #666666;
+        }}
+
+        .email-footer a {{
+            color: #007bff;
+            text-decoration: none;
+        }}
+
+        /* Responsive design */
+        @media (max-width: 600px) {{
+            .email-header h1 {{
+                font-size: 20px;
+            }}
+
+            .email-body p {{
+                font-size: 14px;
+            }}
+
+            .otp-code {{
+                font-size: 28px;
+            }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header Section -->
+        <div class="email-header">
+            <h1>Your One-Time Password (OTP)</h1>
+        </div>
+
+        <!-- Body Section -->
+        <div class="email-body">
+            <p>Hello,</p>
+            <p>We received a request to verify your email address. Use the OTP below to complete your verification process:</p>
+            <span class="otp-code">{OTP}</span>
+            <p>This OTP is valid for the next 10 minutes. If you did not request this, please ignore this email.</p>
+        </div>
+
+        <!-- Footer Section -->
+        <div class="email-footer">
+            <p>Thank you for using our services!</p>
+            <p><a href="#">Contact Support</a> | <a href="#">Privacy Policy</a></p>
+        </div>
+    </div>
+</body>
+</html>
+
+    '''
+    try:
+        msg.add_alternative(html_content, subtype='html')
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+            smtp.starttls()
+            smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            smtp.send_message(msg)
+            return {"res": "success", "message": "Email sent successfully!"}
+    except Exception as e:
+        print(f"Error occurred while sending email: {str(e)}")
+        return {"res": "error", "message": f"Failed to send email: {str(e)}"}
+
+<----------------------------         OLD OTP EMail code END       --------------------------->

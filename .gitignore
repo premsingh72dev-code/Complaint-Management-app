@@ -1,0 +1,33 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Secrets / Keys
+serviceAccountKey.json
+
+# Flask / Web
+app.sock
+flask_session/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+Logs/
+Records/
+notification.log
+*.log
+
+# Uploads
+uploads/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo

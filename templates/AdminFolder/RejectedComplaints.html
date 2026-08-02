@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #eef2f3, #8e9eab);
+        font-family: Arial, sans-serif;
+    }
+
+    .complaint-card {
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+    }
+
+    .complaint-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon {
+        font-size: 18px;
+        margin-right: 8px;
+        color: #dc3545;
+    }
+</style>
+
+<main id="main" class="main">
+
+    <div class="container my-4">
+        <h2 class="text-center mb-4">❌ Rejected Complaints</h2>
+
+        {% if rejected %}
+        <div class="row">
+            {% for complaints in rejected %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card complaint-card p-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-user icon"></i>{{complaints.get('userDetails',
+                            {}).get('name', '')}}</h5>
+                        <p class="card-text"><i class="fas fa-map-marker-alt icon"></i>{{complaints.get('userDetails',
+                            {}).get('address', 'N/A')}}</p>
+                        <p class="card-text"><i class="fas fa-phone icon"></i>+91-{{complaints.get('userDetails',
+                            {}).get('phoneNumber', 'N/A')}}</p>
+                        <p class="card-text"><strong>Issue:</strong> {{complaints.get('Complaint Name', 'N/A')}}</p>
+                        <p class="card-text"><strong>Assigned Technician:</strong> {{complaints.get('TechnicianDetails',
+                            {}).get('Name', '')}}</p>
+                        <p class="card-text"><strong>Technician Contact:</strong>
+                            +91-{{complaints.get('TechnicianDetails', {}).get('Phone', 'N/A')}}</p>
+                        <p class="card-text"><strong>Rejection Reason:</strong> {{complaints.get('Rejected_reason',
+                            'N/A')}}</p>
+                        <p class="card-text"><strong>Status:</strong> <span class="badge bg-danger">Rejected</span></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="d-flex flex-column align-items-center justify-content-center" style="height: 50vh;">
+            <img src="https://cdn-icons-png.flaticon.com/512/2748/2748558.png" alt="No Complaints" width="150">
+            <h3 class="mt-3 text-muted">No Complaints Found</h3>
+            <p class="text-muted">All complaints are resolved, or no records exist.</p>
+        </div>
+        {% endif %}
+    </div>
+
+
+</main>
+
+{% endblock content %}

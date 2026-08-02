@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #eef2f3, #8e9eab);
+    font-family: Arial, sans-serif;
+  }
+</style>
+
+<main id="main" class="main">
+  <div class="pagetitle mx-2 my-3">
+    <span>
+      <h3 style="color: #121212;"><b><i class="bi bi-person-fill"></i> Add Admins & Users</h2></b>
+    </span>
+  </div>
+  <div class="d-grid gap-2 col-10 mx-auto align-items-center my-4">
+    <form id="AddUsersform" class="row g-3 ">
+      <div class="col-md-6">
+        <label for="Enter Name" class="form-label">Enter Full Name</label>
+        <input type="text" class="form-control" name="Name" id="enter_name" placeholder="Name" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="inputState" class="form-label">Account Holder Type</label>
+        <select id="account_holder" class="form-select" name="Account Holder" required>
+          <option selected disabled value="">Choose Account Holder...</option>
+
+          {% for i in users['Account Holder'] %}
+          <option value='{{i}}'>{{i}}</option>
+          {% endfor %}
+
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="inputState" class="form-label">Select Gender</label>
+        <select id="gender" class="form-select" name="gender" required>
+          <option selected disabled value="">Choose Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="Email" class="form-label">Enter Email ID</label>
+        <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email ID" required>
+        <span id="check-email"></span>
+      </div>
+      <div class="col-md-6">
+        <label for="Contact" class="form-label">Enter Contact</label>
+        <input type="tel" class="form-control" name="Phone Number" id="contact" pattern="[0-9]{10}" maxlength="10"
+          minlength="10" placeholder="Enter Contact" required>
+        <span id="check-number"></span>
+      </div>
+
+      <div class="col-md-6">
+        <label for="Enter Name" class="form-label">Enter Branch</label>
+        <input type="text" class="form-control" name="Branch" id="branch_name" placeholder="Enter Branch Name" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="Enter Name" class="form-label">Enter Designation</label>
+        <input type="text" class="form-control" name="Designation" id="enter_designation"
+          placeholder="Enter Designation" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="Enter Name" class="form-label">Enter House No.</label>
+        <input type="text" class="form-control" name="House Number" id="house_number" placeholder="Enter House No."
+          required>
+      </div>
+      <div class="col-md-6">
+        <label for="Enter Name" class="form-label">Enter LandMark</label>
+        <input type="text" class="form-control" name="landmark" id="landmark-location" placeholder="Enter Landmark"
+          required>
+      </div>
+
+
+
+      <div class="col-md-6">
+        <label for="Password" class="form-label">Enter Password</label>
+        <input type="password" class="form-control" name="password" id="password" placeholder="Enter Password" required>
+      </div>
+
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="Status" id="gridCheck" checked>
+          <label class="form-check-label" for="gridCheck">
+            Status of User
+          </label>
+        </div>
+      </div>
+      <div class="d-grid gap-2 col-12">
+        <button type="submit" name="register" id="register" disabled class="btn btn-warning">Add User</button>
+      </div>
+    </form>
+  </div>
+
+</main>
+
+
+<script>
+
+
+  $('#AddUsersform').submit(function (e) {
+    e.preventDefault();
+    var form = $(this).serializeArray();
+    // form.push({"name":"token", "value":"{{token}}"})
+    $.ajax({
+      method: "POST",
+      url: '/AddUsersRecords',
+      data: form,
+      dataType: 'json',
+      success: function (response) {
+        if (response.res == 'success') {
+          swal("Successfull !", "Account Successfully Registered!", "success");
+          $('#AddUsersform').trigger('reset');
+          $('#register').attr("disabled", true);
+        }
+        else if (response.res == 'Phone Registered') {
+          swal("Contact Number Already Registered!", "Contact Number Already Registered!", "error");
+        }
+        else {
+          swal(`${response.res}`, `${response.msg}`, 'error')
+        }
+      }
+    })
+  })
+
+
+  // Checking Email-id:
+  $(document).ready(function () {
+    $('#email').blur(function () {
+      var email = { email: $(this).val() }
+      $.ajax({
+        url: '/checkvalidEmailexists',
+        type: 'POST',
+        data: email,
+        dataType: 'JSON',
+        success: function (res) {
+          for (let i in res) {
+            if (res[i] === "already registered") {
+              $('#check-email').html('<span class="text-danger">Email-id Already Registered</span>');
+              $('#register').attr("disabled", true);
+            }
+            else if (res[i] == "Not registered") {
+              $('#check-email').html('<span class="text-success"></span>');
+              $('#register').attr("disabled", false);
+            }
+          }
+        }
+      })
+    });
+  });
+
+</script>
+
+
+
+
+{% endblock content %}

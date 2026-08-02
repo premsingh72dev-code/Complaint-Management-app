@@ -1,0 +1,11 @@
+1. Add User par --> Token set up when request send. and Role add Karwana hain if 
+2. login ke wqt --> token dena hain client ko 
+
+<======================== old code ================>
+# Email_Username = "anshdelhijha@gmail.com"
+# Email_Password = "imonrdmmilswltxw"
+
+<======================== old code ================>
+
+
+

@@ -1,0 +1,547 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #eef2f3, #8e9eab);
+        font-family: Arial, sans-serif;
+    }
+
+
+    .stat-box {
+        padding: 12px;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .stat-box:hover {
+        transform: scale(1.05);
+    }
+
+    .icon-container {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+    .stat-number {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .stat-text {
+        font-size: 18px;
+    }
+
+    /* Custom Colors */
+    .users-box {
+        background: #007bff;
+        /* Blue */
+    }
+
+    .admins-box {
+        background: #28a745;
+        /* Green */
+    }
+
+    .total-box {
+        background: #fd7e14;
+        /* Orange */
+    }
+</style>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+<!-- Font Awesome (Optional) -->
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+
+<main id="main" class="main">
+
+    <div class="pagetitle mx-2 my-2 mb-0 d-flex justify-content-between align-items-center">
+        <h3 class="fw-bolder"><i class="bi bi-house-door-fill"></i>  All Admins & Users Dashboard</h3>
+    </div>
+
+    <div class="container mt-2">
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="stat-box users-box">
+                    <div class="icon-container">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div class="stat-number"><span id="totalusers"></span></div>
+                    <div class="stat-text">Total Users</div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="stat-box admins-box">
+                    <div class="icon-container">
+                        <i class="bi bi-person-badge-fill"></i>
+                    </div>
+                    <div class="stat-number"><span id="totaladmins"></span></div>
+                    <div class="stat-text">Total Admins</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-box total-box">
+                    <div class="icon-container">
+                        <i class="bi bi-bar-chart-fill"></i>
+                    </div>
+                    <div class="stat-number"><span id="totaladminusers"></span></div>
+                    <div class="stat-text">Total Users + Admins</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--******************************** Modal ***********************************-->
+
+    <div class="modal fade" id="UsersAccountModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update User Details</h1>
+                    <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="update_users_details" class="row g-2" , method="post">
+                        <div class="col-md-6">
+                            <label for="Enter Name" class="form-label">Enter Name</label>
+                            <input type="text" class="form-control" name="Name" id="user_name" placeholder="Name"
+                                required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="inputState" class="form-label">Select Gender</label>
+                            <select id="gender" class="form-select" name="gender" required>
+                                <option selected disabled value="">Choose Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="Email" class="form-label">Enter Email ID</label>
+                            <input type="email" class="form-control" name="email" id="useremail"
+                                placeholder="Enter Email ID" required>
+                            <span id="email-check"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Contact" class="form-label">Enter Contact</label>
+                            <input type="tel" class="form-control" maxlength="10" minlength="10" pattern="[0-9]{10}"
+                                name="Phone Number" id="usercontact" placeholder="Enter Contact" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Enter Name" class="form-label">Enter Branch</label>
+                            <input type="text" class="form-control" name="Branch" id="branch_name"
+                                placeholder="Enter Branch Name" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="Enter Name" class="form-label">Enter Designation</label>
+                            <input type="text" class="form-control" name="Designation" id="designation_name"
+                                placeholder="Enter Designation" required>
+                        </div>
+
+                        <!-- <div class="col-md-6">
+                            <label for="inputState" class="form-label">Account Holder Type</label>
+                            <select id="account_holder" class="form-select" name="Account Holder" required disabled>
+                                <option selected disabled value="">Choose Account Holder...</option>
+                                <option value="User">User</option>
+                                <option value="Plumber">Plumber</option>
+                                <option value="Electrician">Electrician</option>
+                                <option value="Furniture">Furniture</option>
+                            </select>
+                        </div> -->
+
+                        <div class="col-md-6">
+                            <label for="Enter Name" class="form-label">Enter House No.</label>
+                            <input type="text" class="form-control" name="House Number" id="house_number"
+                                placeholder="Enter House No." required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Enter Name" class="form-label">Enter LandMark</label>
+                            <input type="text" class="form-control" name="landmark" id="landmark_location"
+                                placeholder="Enter Landmark" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="Password" class="form-label">Enter Password</label>
+                            <input type="text" class="form-control" name="password" id="userpassword"
+                                placeholder="Enter Password" required>
+                        </div>
+                        <div class="col-md-6 d-none">
+                            <label for="clientID" class="form-label">Account ID</label>
+                            <input type="text" class="form-control" name="ID" id="clientID" required readonly>
+                        </div>
+                        <button type="submit" id="submit_userdetails" class="btn btn-warning">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-grid gap-2 col-12">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- *******************           Modal END       ********************* -->
+
+    <!-- *******************           Nav For ALL Users       ********************* -->
+    <div class="mt-4">
+
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-admin-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">All Admin</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-users-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+                    type="button" role="tab" aria-controls="pills-profile" aria-selected="false">All Users</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-admin-tab"
+                tabindex="0">
+                <div class="table-responsive">
+                    <table class="table border mt-2 table-bordered">
+                        <thead class="my-5" style="color: #fff; background-color: #5b84ac;">
+                            <tr>
+                                <th style="text-align: center;">S.No</th>
+                                <th style="text-align: center;">Name</th>
+                                <th style="text-align: center;">Phone No.</th>
+                                <th style="text-align: center;">Email ID</th>
+                                <th style="text-align: center;">Account Type</th>
+                                <th style="text-align: center;">Edit Details</th>
+                                <th style="text-align: center;">Status</th>
+                                <th style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="alladminsdata">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-users-tab"
+                tabindex="0">
+                <div class="table-responsive">
+                    <table class="table border mt-2 table-bordered table table-striped table-bordered">
+                        <thead class="my-5" style="color: #fff; background-color: #5b84ac;">
+                            <tr>
+                                <th style="text-align: center;" scope="col">S.No</th>
+                                <th style="text-align: center;" scope="col">Name</th>
+                                <th style="text-align: center;" scope="col">Phone No.</th>
+                                <th style="text-align: center;" scope="col">Email ID</th>
+                                <th style="text-align: center;" scope="col">Edit Details</th>
+                                <th style="text-align: center;" scope="col">Status</th>
+                                <th style="text-align: center;" scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allusers">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+
+        $(document).ready(function () {
+            AllUsers();
+            UsersNumbers();
+        });
+
+        function UsersNumbers() {
+            $.ajax({
+                url: "/AccountNumbersUsers",
+                method: "GET",
+                success: function (res) {
+                    console.log(res);
+                    let admins = res['res']['Admins']
+                    let users = res['res']['Users']
+                    let totalusersNumbers = Number(admins) + Number(users)
+                    $("#totalusers").text(users)
+                    $("#totaladmins").text(admins)
+                    $("#totaladminusers").text(totalusersNumbers)
+                }
+            })
+        }
+
+        function AllUsers() {
+            $.ajax({
+                url: "/GetAllUsersRecordsData",
+                method: "POST",
+                data: { "token": '{{token}}' },
+                dataType: "json",
+                success: function (res) {
+                    console.log("Response received:", res);
+
+                    let subadmin_data = "";
+                    let allusersdata = "";
+
+                    // Check if 'Admins' key exists and is an array
+                    if (Array.isArray(res.res.Admins) && res.res.Admins.length > 0) {
+                        res.res.Admins.forEach((admin, index) => {
+                            console.log("Admin Data:", admin);
+
+                            let status = admin.Status === "active" ? "checked" : "";
+
+                            subadmin_data += `
+                                <tr>
+                                    <td style="text-align: center;">${index + 1}</td>
+                                    <td style="text-align: center;">${admin.Name}</td>
+                                    <td style="text-align: center;">${admin["Phone Number"]}</td>
+                                    <td style="text-align: center;">${admin.email}</td>
+                                    <td style="text-align: center;">${admin["Account Holder"]}</td>
+                                    <td style="text-align:center">
+                                        <i style="cursor:pointer" class="bi bi-pencil-fill text-primary" data-bs-toggle="modal" 
+                                           data-bs-target="#UsersAccountModal" onclick="EditUser('${admin._id}')"></i>
+                                    </td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <span class="form-check form-switch d-flex justify-content-center">
+                                            <input style="cursor:pointer" class="form-check-input" type="checkbox" 
+                                                   onclick="AccountStatus('${admin._id}')" role="switch" ${status}>
+                                            <label class="form-check-label"></label>
+                                        </span>
+                                    </td>
+                                    <td style="text-align: center; cursor:pointer">
+                                        <i class="bi bi-trash-fill text-danger" onclick="DeleteUser('${admin._id}')"></i>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        subadmin_data = `
+                            <tr>
+                                <td colspan="9" style="text-align: center;">No Admin Found</td>
+                            </tr>
+                        `;
+                    }
+
+                    $("#alladminsdata").html(subadmin_data);
+
+
+                    if (Array.isArray(res.res.users) && res.res.users.length > 0) {
+                        res.res.users.forEach((user, index) => {
+                            console.log("User Data:", user);
+
+                            let user_status = user.Status === "active" ? "checked" : "";
+
+                            allusersdata += `
+                                <tr>
+                                    <td style="text-align:center;">${index + 1}</td>
+                                    <td style="text-align:center;">${user.Name}</td>
+                                    <td style="text-align:center;">${user["Phone Number"]}</td>
+                                    <td style="text-align:center;">${user.email}</td>
+                                    <td style="text-align:center">
+                                        <i style="cursor:pointer" class="bi bi-pencil-fill text-primary" data-bs-toggle="modal" 
+                                           data-bs-target="#UsersAccountModal" onclick="EditUser('${user._id}')"></i>
+                                    </td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <span class="form-check form-switch d-flex justify-content-center">
+                                            <input class="form-check-input" style="cursor:pointer" type="checkbox" 
+                                                   onclick="AccountStatus('${user._id}')" role="switch" ${user_status}>
+                                            <label class="form-check-label"></label>
+                                        </span>
+                                    </td>
+                                    <td style="text-align: center; cursor:pointer">
+                                        <i class="bi bi-trash-fill text-danger" onclick="DeleteUser('${user._id}')"></i>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        allusersdata = `
+                            <tr>
+                                <td colspan="8" style="text-align: center;">No Users Found</td>
+                            </tr>
+                        `;
+                    }
+
+                    $("#allusers").html(allusersdata);
+                },
+                error: function (err) {
+                    console.error("Error fetching users:", err);
+                }
+            })
+        };
+
+
+        function EditUser(args) {
+            console.log('args: ', args);
+            $.ajax({
+                url: "/EditAccountDetails",
+                method: "POST",
+                data: {
+                    "ID": args,
+                    "token": "{{token}}"
+                },
+                dataType: 'json',
+                success: function (res) {
+                    for (let i in res['res']) {
+                        let name = res['res']['Name']
+                        let gender = res['res']['gender']
+                        let email = res['res']['email']
+                        let contact_number = res['res']['Phone Number']
+                        let branch_name = res['res']['Branch']
+                        let designation_name = res['res']['Designation']
+                        let password = res['res']['password']
+                        let house_number = res['res']['House Number']
+                        let landmark = res['res']['landmark']
+
+                        console.log('desig', designation_name);
+
+                        document.getElementById("user_name").value = name
+                        document.getElementById("gender").value = gender
+
+                        document.getElementById("useremail").value = email
+                        document.getElementById("usercontact").value = contact_number
+
+                        document.getElementById("branch_name").value = branch_name
+                        document.getElementById("designation_name").value = designation_name
+
+                        document.getElementById("userpassword").value = password
+                        document.getElementById("house_number").value = house_number
+                        document.getElementById("landmark_location").value = landmark
+
+                        document.getElementById("clientID").value = res['res']['_id']
+
+                    }
+                }
+            })
+        };
+
+        function AccountStatus(args) {
+            $.ajax({
+                url: "/AccountStatus",
+                method: "POST",
+                data: {
+                    "ID": args,
+                    "token": "{{token}}"
+                },
+                dataType: 'json',
+                success: function (res) {
+                    console.log("response: ", res);
+                    if (res.res == "success") {
+                        swal("success", "Account Status Successfully Updated", "success");
+                        AllUsers();
+                    } else {
+                        swal("error", "Something went wrong ! Please try again", "error")
+                    }
+                },
+                error: function (error) {
+                    console.log("err: ", error);
+                    swal("error", "Something went wrong ! Please try again", "error")
+                }
+            })
+
+        };
+
+        function DeleteUser(args) {
+            swal({
+                title: "Are you sure?",
+                text: "You want to Delete ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((result) => {
+                if (result) (
+                    $.ajax({
+                        url: "/DeleteAccount",
+                        method: "POST",
+                        data: {
+                            "ID": args,
+                            "token": "{{token}}"
+                        },
+                        dataType: "json",
+                        success: function (res) {
+                            console.log(res);
+                            if (res.res == "success") {
+                                swal("success", "Account Successfully Removed", "success");
+                                UsersNumbers();
+                                AllUsers();
+                            } else {
+                                swal("error", "Something went wrong ! Please try again", "error")
+                            }
+                        },
+                        error: function (err) {
+                            console.log('error: ', err);
+                        }
+                    })
+                )
+            })
+        };
+
+        $("#update_users_details").submit(function (e) {
+            e.preventDefault();
+            let form = $(this).serializeArray();
+            form.push({ "name": "token", "value": "{{token}}" })
+            $.ajax({
+                url: "/UpdateUserdetails",
+                method: "POST",
+                data: form,
+                dataType: 'json',
+                success: function (res) {
+                    if (res.res == "success") {
+                        swal("success", "Account Successfully Updated", "success");
+                        AllUsers();
+                        $('#UsersAccountModal').modal('hide');
+                    } else {
+                        swal("error", "Something went wrong ! Please try again", "error")
+                    }
+                },
+                error: function (err) {
+                    console.log('err: ', err);
+                }
+            })
+        });
+
+        // Checking Email-id:
+        $(document).ready(function () {
+            $('#useremail').blur(function () {
+                var email = { email: $(this).val() }
+                $.ajax({
+                    url: '/checkvalidEmailexists',
+                    type: 'POST',
+                    data: email,
+                    dataType: 'JSON',
+                    success: function (res) {
+                        for (let i in res) {
+                            console.log(res);
+                            console.log(res[i]);
+                            if (res[i] === "already registered") {
+                                $('#email-check').html('<span class="text-danger">Email-id Already Registered</span>');
+                                $('#submit_userdetails').attr("disabled", true);
+                            }
+                            else if (res[i] == "Not registered") {
+                                $('#email-check').html('<span class="text-success"></span>');
+                                $('#submit_userdetails').attr("disabled", false);
+                            }
+                        }
+                    }
+                })
+            });
+        });
+
+    </script>
+    {% endblock content %}
+
+</main>

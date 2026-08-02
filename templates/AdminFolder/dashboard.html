@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: white;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Complaint Boxes Styling */
+
+
+    .dashboard-container {
+        padding: 30px;
+    }
+
+    .welcome-text {
+        font-size: 26px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .filter-tabs {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .filter-tabs .btn {
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .card {
+        border-radius: 15px;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        height: 100%;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h5 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .complaint-number h3 {
+        font-size: 34px;
+        font-weight: bold;
+    }
+
+    .card i {
+        font-size: 45px;
+        opacity: 0.9;
+    }
+
+    .card.bg-primary {
+        background-color: #007bff;
+    }
+
+    .card.bg-success {
+        background-color: #28a745;
+    }
+
+    .card.bg-warning {
+        background-color: #ffc107;
+        color: black;
+    }
+
+    .card.bg-danger {
+        background-color: #dc3545;
+    }
+
+    /* <-----   Chart CSS ----------> */
+
+    .chart-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .chart-box {
+        width: 575px;
+        height: 475px;
+    }
+
+
+    @media (min-width: 1200px) {
+
+        #main,
+        #footer {
+            margin-right: 0px;
+        }
+    }
+
+    .blink-container h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0d6efd;
+        margin-bottom: 1rem;
+        animation: blink-text 2s infinite;
+    }
+
+    .blink-container p {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #198754;
+        animation: blink-text-alt 2s infinite;
+    }
+
+    /* Subtle blinking text */
+    @keyframes blink-text {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.2;
+        }
+    }
+
+    @keyframes blink-text-alt {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.4;
+        }
+    }
+
+    /* Optional: pulse animation for card container */
+    @keyframes pulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.02);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .blink-container {
+            padding: 1.5rem;
+        }
+
+        .blink-container h1 {
+            font-size: 1.5rem;
+        }
+
+        .blink-container p {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+
+
+</head>
+
+<body>
+
+    <main id="main" class="main">
+        <div class="container dashboard-container">
+            <!-- Greeting Section -->
+            <div class="blink-container">
+                <h1 class="text-center">✨ Sahayata Dashboard at your click! ✨</h1>
+                <p class="text-center">🚀 Manage your Complaint Now!</p>
+            </div>
+
+            <!-- Complaint Filter Tabs -->
+            <div class="filter-tabs my-4">
+                <button class="btn btn-outline-dark active" onclick="filterComplaints('today')">Today's
+                    Complaints</button>
+                <button class="btn btn-outline-dark" onclick="filterComplaints('month')">This Month's
+                    Complaints</button>
+                <button class="btn btn-outline-dark" onclick="filterComplaints('all')">All Complaints</button>
+            </div>
+
+            <!-- Complaint Status Boxes -->
+            <div class="row g-3">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card bg-primary">
+                        <h5>Open Complaints</h5>
+                        <div class="complaint-box">
+                            <h3 id="open_complaints_number">0</h3>
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card bg-success">
+                        <h5>Acknowledged Complaints</h5>
+                        <div class="complaint-box">
+                            <h3 id="progress_complaints_number">0</h3>
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card bg-warning">
+                        <h5>Completed Complaints</h5>
+
+                        <div class="complaint-box">
+                            <h3 id="completed_complaints_number">0</h3>
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card bg-danger">
+                        <h5>Rejected Complaints</h5>
+                        <div class="complaint-box">
+                            <h3 id="rejected_complaints_number">0</h3>
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Graph Demo -->
+        <div class="chart-container">
+            <div class="chart-box">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <canvas id="myChart2"></canvas>
+            </div>
+        </div>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            ComplaintsData('today');
+            feedbackChart();
+        })
+
+        // <----------------------------      Complaints API      ----------------------->
+
+        function filterComplaints(type) {
+            console.log("Type is: ", type);
+            document.querySelectorAll(".filter-tabs .btn").forEach(btn => btn.classList.remove("active"));
+            event.target.classList.add("active");
+
+            if (type === 'today') {
+                ComplaintsData(type);
+            } else if (type === 'month') {
+                ComplaintsData(type);
+            } else {
+                ComplaintsData(type);;
+            }
+        }
+
+
+
+
+        function ComplaintsData(type) {
+            let token = '{{token}}'
+
+            $.ajax({
+                url: '/DashboardComplaintsData',
+                method: 'POST',
+                data: {
+                    'token': token,
+                    'type': type,
+                },
+                success: function (res) {
+                    console.log('Res', res);
+
+                    if (res && res['res']) {
+                        let open_complaints = res['res']['Open Complaints'] || 0;
+                        let progress_complaints = res['res']['Approved Complaints'] || 0;
+                        let completed_complaints = res['res']['Completed Complaints'] || 0;
+                        // let closed_complaints = res['res']['Rejected Complaints'] || 0;
+
+                        // Update UI
+                        $("#open_complaints_number").text(open_complaints);
+                        $("#progress_complaints_number").text(progress_complaints);
+                        $("#completed_complaints_number").text(completed_complaints);
+                        // $("#rejected_complaints_number").text(closed_complaints);
+
+                        // Reset complaints_data before adding new data
+                        complaints_data = [open_complaints, progress_complaints, completed_complaints];
+                        ComplaintsRecords(complaints_data)
+                    } else {
+                        console.warn("Invalid response format:", res);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            })
+        }
+
+
+
+        // <-------------------------   Complaints Charts --------------------------------->   
+        var myChart = null;
+
+        function ComplaintsRecords(complaints_data) {
+            var canvas = document.getElementById('myChart');
+
+            if (!canvas) {
+                console.error("Canvas element 'myChart' not found!");
+                return;
+            }
+
+            var ctx = canvas.getContext('2d');
+
+            // Check if complaints_data has the correct length
+            if (complaints_data.length !== 3) {
+                console.error("complaints_data must have exactly 4 elements.");
+                return; // Exit if data is not valid
+            }
+
+            // Destroy the existing chart if it exists
+            if (myChart instanceof Chart) {
+                myChart.destroy();
+            }
+
+            // Create a new chart
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Open Complaints', 'Acknowledged Complaints', 'Completed Complaints'],
+                    datasets: [{
+                        label: 'Complaints Status',
+                        data: complaints_data,
+                        borderColor: ['pink'],
+                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                        pointBackgroundColor: ['blue', 'green', 'yellow'],
+                        pointBorderColor: ['blue', 'green', 'yellow'],
+                        pointRadius: 5,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'black' // X-axis label color
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'black' // Y-axis label color
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'black' // Legend label color
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // <-------------------------   Feedback pie chart  ---------------------------->
+
+        function feedbackChart() {
+            $.ajax({
+                url: "/feedbackgraphdata",
+                method: "GET",
+                dataType: 'json',
+                success: function (res) {
+                    console.log("Respons is: ", res);
+                    if (res.res === "success") {
+                        admins_data = res['data']['Admins']
+                        averageRatings = res['data']['Average_Ratings']
+                        piechartGraph(admins_data, averageRatings);
+
+                    }
+                }
+            })
+        }
+
+        function piechartGraph(admins_data, averageRatings) {
+            var ctx2 = document.getElementById('myChart2').getContext('2d');
+
+            var myChart2 = new Chart(ctx2, {
+                type: 'pie',
+                data: {
+                    labels: admins_data,
+                    datasets: [{
+                        label: 'Average Feedback',
+                        data: averageRatings,
+                        backgroundColor: ['blue', 'yellow', 'green', 'red', 'orange', 'brown', 'pink', 'purple']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Performance Indicator',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            color: 'black',
+                            padding: 20
+                        },
+                        legend: {
+                            labels: {
+                                color: 'black' // Set legend text color
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+
+
+
+
+    </script>
+
+
+    {% endblock content %}
